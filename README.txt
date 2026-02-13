@@ -5,7 +5,9 @@ pygameで作成した鉱石探索ゲーム
 ## 必要環境
 Python 3.x
 
-## インストール
+## インストール方法
+git clone https://github.com/calmstallion3018-eng/INFINITE_GOLD.git
+cd INFINITE_GOLD
 pip install -r requirements.txt
 
 ## 起動方法
