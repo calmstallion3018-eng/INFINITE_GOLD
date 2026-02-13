@@ -1,0 +1,23 @@
+# 仮想環境
+.venv/
+venv/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# ビルド
+build/
+dist/
+
+# 環境変数
+.env
+
+# エディタ
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
