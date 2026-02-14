@@ -134,7 +134,7 @@ class Basescene:
         pygame.draw.rect(canvas, BLACK, self.money_rect_real, 1)
         canvas.blit(self.money_disp, self.money_rect)
         # 鉱石の所持数の描画
-        for i in range(settings.ore_limit(settings.ore_prop_list)):
+        for i in range(settings.ore_limit(settings.get_probs(settings.lucky_flower_level))):
             canvas.blit(self.right_ore_image[i], (MINE_W, (2+i)*RIGHT_H))
             if len(settings.ore_name_list[i]) <= 6:
                 canvas.blit(self.ore_name_disp[i], self.ore_name_rect[i])

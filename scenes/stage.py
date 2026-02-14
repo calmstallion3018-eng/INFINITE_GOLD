@@ -71,7 +71,7 @@ class Main():
             self.wall_rect.append(pygame.Rect(x, y, BLOCK_SIZE, BLOCK_SIZE))
         
         # この層の鉱石出現確率
-        self.this_stage_ore_prop_list = settings.ore_prop_list
+        self.this_stage_ore_prob_list = settings.get_probs(settings.lucky_flower_level)
         
         # 鉱物の固有値(0-1)
         ok_random = True
@@ -101,7 +101,7 @@ class Main():
                 if settings.ore_exist[i][j] == -1:
                     continue
                 for k in range(len(settings.ore_list)):
-                    if settings.ore_exist[i][j] < sum(self.this_stage_ore_prop_list[:k+1]):
+                    if settings.ore_exist[i][j] < sum(self.this_stage_ore_prob_list[:k+1]):
                         settings.mining_durability[i][j] = settings.ore_durability_list[k]
                         break
         
@@ -263,7 +263,7 @@ class Main():
             if settings.mining_degree[ii][jj] >= settings.mining_durability[ii][jj]:
                 self.ground[ii][jj] = None
                 for k in range(len(settings.ore_list)):
-                    if settings.ore_exist[ii][jj] < sum(self.this_stage_ore_prop_list[:k+1]):
+                    if settings.ore_exist[ii][jj] < sum(self.this_stage_ore_prob_list[:k+1]):
                         self.update_ore(k, settings.reinc_ore_get_ratio)
                         settings.ore_exist[ii][jj] = -1
                         break
@@ -357,7 +357,7 @@ class Main():
             if settings.mining_degree[gy + dy][gx + dx] >= settings.mining_durability[gy + dy][gx + dx]:
                 self.ground[gy + dy][gx + dx] = None
                 for k in range(len(settings.ore_list)):
-                    if settings.ore_exist[gy + dy][gx + dx] < sum(self.this_stage_ore_prop_list[:k+1]):
+                    if settings.ore_exist[gy + dy][gx + dx] < sum(self.this_stage_ore_prob_list[:k+1]):
                         self.update_ore(k, settings.reinc_ore_get_ratio)
                         settings.ore_exist[gy + dy][gx + dx] = -1
                         break
@@ -386,7 +386,7 @@ class Main():
             for j in range(settings.mining_size_x):
                 if settings.ore_exist[i][j] != -1:
                     for k in range(len(settings.ore_list)):
-                        if settings.ore_exist[i][j] < sum(self.this_stage_ore_prop_list[:k+1]):
+                        if settings.ore_exist[i][j] < sum(self.this_stage_ore_prob_list[:k+1]):
                             canvas.blit(self.ore_image[k], ((2+j)*BLOCK_SIZE + self.camera_x, (1+i)*BLOCK_SIZE + self.camera_y))
                             if k == 0:
                                 pygame.draw.line(canvas, BLACK, ((2+j)*BLOCK_SIZE + self.camera_x, (1+i)*BLOCK_SIZE + self.camera_y), ((3+j)*BLOCK_SIZE + self.camera_x, (1+i)*BLOCK_SIZE + self.camera_y))

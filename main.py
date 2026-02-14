@@ -188,7 +188,7 @@ def y_n_window(event, y_n_button, pos, select, which, y_f, n_f=None, y_gamen=Non
             elif isinstance(n_gamen, reincarnation.Main):
                 gamen_liset(mine_list)
                 y_gamen = mine_list[0]
-            if mine_list is not None:
+            elif mine_list is not None:
                 mine_list[0] = stage.Main()
                 y_gamen = mine_list[0]
             new_gamen = y_gamen
@@ -387,7 +387,7 @@ while running:
             
         elif gamen is gamen_mine_list[0]:
             if gamen.next_stage_select:
-                gamen.next_stage_select, gamen.y_n_which, gamen = y_n_window(event, gamen.y_n_button, event_pos, gamen.next_stage_select, gamen.y_n_which, gamen.settings_liset, n_f=gamen.move_or_mining(-1,0), mine_list=gamen_mine_list, n_gamen=gamen)
+                gamen.next_stage_select, gamen.y_n_which, gamen = y_n_window(event, gamen.y_n_button, event_pos, gamen.next_stage_select, gamen.y_n_which, gamen.settings_liset, n_f=lambda: gamen.move_or_mining(-1,0), mine_list=gamen_mine_list, n_gamen=gamen)
             elif gamen.end_game_select:
                 gamen.end_game_select, gamen.y_n_which, gamen = y_n_window(event, gamen.y_n_button, event_pos, gamen.end_game_select, gamen.y_n_which, gamen_title.settings_liset, y_gamen=gamen_title, n_gamen=gamen)
             else:
@@ -449,7 +449,7 @@ while running:
                 if event.type == MOUSEBUTTONDOWN and event.button == 1:
                     # レベルアップ確認画面（マウス）
                     if gamen.button_levelup.collidepoint(event_pos):
-                        if settings.money >= int(settings.flower_levelup_money_zero * settings.flower_levelup_money_ratio**settings.lucky_flower_level):
+                        if settings.lucky_flower_level < 300 and settings.money >= int(settings.flower_levelup_money_zero * settings.flower_levelup_money_ratio**settings.lucky_flower_level):
                             gamen.can_select = True
                         else:
                             # Xマークの表示（マウスのみ）
@@ -462,7 +462,7 @@ while running:
                 elif event.type == KEYDOWN:
                     # レベルアップ確認画面（キーボード）
                     if event.key == K_z or event.key == K_SPACE or event.key == K_RETURN:
-                        if settings.money >= int(settings.flower_levelup_money_zero * settings.flower_levelup_money_ratio**settings.lucky_flower_level):
+                        if settings.lucky_flower_level < 300 and settings.money >= int(settings.flower_levelup_money_zero * settings.flower_levelup_money_ratio**settings.lucky_flower_level):
                             gamen.can_select = True
                     # stage画面に戻る（キーボードのみ）
                     gamen = back_stage(gamen)
@@ -724,9 +724,9 @@ while running:
                     settings.character_move_time[i] = 0
                 else:
                     settings.character_move_time[i] += settings.character_speed[i]
-                    if settings.character_move_time[i] >= 100: # 移動間隔
+                    if settings.character_move_time[i] >= 50: # 移動間隔
                         gamen.character_move_or_mining(i)
-                        settings.character_move_time[i] -= 100
+                        settings.character_move_time[i] -= 50
                 
         # 鉱山の画面移動
         if tracking == True:

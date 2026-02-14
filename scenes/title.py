@@ -79,8 +79,6 @@ class Main():
 
         settings.mining_power = [1]
 
-        settings.ore_prop_list = [0.9, 0.1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-
         settings.lucky_flower_level = 0
 
         settings.pickaxe_level = [[] for _ in range(6)]

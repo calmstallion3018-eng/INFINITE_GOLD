@@ -48,50 +48,46 @@ class Main():
         
         # レベル上昇rect
         self.level_font = pygame.font.SysFont(self.font_path, TEXT_SIZE * 3//2)
+        self.levelup_font = pygame.font.SysFont(self.font_path, TEXT_SIZE)
+        
         self.levelup_before_disp = self.level_font.render(f"LEVEL {settings.lucky_flower_level}", True, BLACK)
-        self.levelup_before_rect_real = pygame.Rect(0, HEADLINE_SIZE ,MINE_W // 2, 2*TEXT_SIZE)
-        self.levelup_before_rect = self.levelup_before_disp.get_rect(center=self.levelup_before_rect_real.center)
+        self.levelup_before_rect = self.levelup_before_disp.get_rect(center=(MINE_W // 4, HEADLINE_SIZE + TEXT_SIZE))
+        
+        self.before_values = settings.get_probs(settings.lucky_flower_level)
+        self.levelup_before_ore_name_disp = [None] * len(settings.ore_list)
+        self.levelup_before_ore_prob_disp = [None] * len(settings.ore_list)
+        self.levelup_before_ore_name_rect = [None] * len(settings.ore_list)
+        self.levelup_before_ore_prob_rect = [None] * len(settings.ore_list)
+        for i in range(len(settings.ore_list)):
+            self.levelup_before_ore_name_disp[i] = self.levelup_font.render(settings.ore_name_list[i], True, BLACK)
+            self.levelup_before_ore_prob_disp[i] = self.levelup_font.render(f"{self.before_values[i]:.2%}", True, BLACK)
+            self.levelup_before_ore_name_rect[i] = self.levelup_before_ore_name_disp[i].get_rect(midleft=(TEXT_SIZE, HEADLINE_SIZE + (2*i+5)*TEXT_SIZE//2))
+            self.levelup_before_ore_prob_rect[i] = self.levelup_before_ore_prob_disp[i].get_rect(midright=(MINE_W // 2 - ADJUST, HEADLINE_SIZE + (2*i+5)*TEXT_SIZE//2))
+        
         self.levelup_arrow_disp = self.level_font.render("→", True, BLACK)
         self.levelup_arrow_rect = self.levelup_arrow_disp.get_rect(center=(MINE_W // 2, HEADLINE_SIZE + TEXT_SIZE))
         self.levelup_after_disp = self.level_font.render(f"LEVEL {settings.lucky_flower_level+1}", True, BLACK)
-        self.levelup_after_rect_real = pygame.Rect(MINE_W // 2, HEADLINE_SIZE ,MINE_W // 2, 2*TEXT_SIZE)
-        self.levelup_after_rect = self.levelup_after_disp.get_rect(center=self.levelup_after_rect_real.center)
+        self.levelup_after_rect = self.levelup_after_disp.get_rect(center=(MINE_W * 3//4, HEADLINE_SIZE + TEXT_SIZE))
         
-        self.levelup_font = pygame.font.SysFont(self.font_path, TEXT_SIZE)
-        self.levelup_before_ore_name_disp = [None] * len(settings.ore_list)
-        self.levelup_before_ore_prop_disp = [None] * len(settings.ore_list)
-        self.levelup_before_ore_rect_real = [None] * len(settings.ore_list)
-        self.levelup_before_ore_name_rect = [None] * len(settings.ore_list)
-        self.levelup_before_ore_prop_rect = [None] * len(settings.ore_list)
+        self.after_values = settings.get_probs(settings.lucky_flower_level+1)
+        self.levelup_updown_ore_prob_disp = [None] * len(settings.ore_list)
+        self.levelup_after_ore_prob_disp = [None] * len(settings.ore_list)
+        self.levelup_updown_ore_prob_rect = [None] * len(settings.ore_list)
+        self.levelup_after_ore_prob_rect = [None] * len(settings.ore_list)
         for i in range(len(settings.ore_list)):
-            self.levelup_before_ore_name_disp[i] = self.levelup_font.render(settings.ore_name_list[i], True, BLACK)
-            self.levelup_before_ore_prop_disp[i] = self.levelup_font.render(f"{settings.ore_prop_list[i]:.1%}", True, BLACK)
-            self.levelup_before_ore_rect_real[i] = pygame.Rect(TEXT_SIZE, HEADLINE_SIZE + (i+2)*TEXT_SIZE, MINE_W // 2 - TEXT_SIZE - 1, TEXT_SIZE)
-            self.levelup_before_ore_name_rect[i] = self.levelup_before_ore_name_disp[i].get_rect(midleft=self.levelup_before_ore_rect_real[i].midleft)
-            self.levelup_before_ore_prop_rect[i] = self.levelup_before_ore_prop_disp[i].get_rect(midright=self.levelup_before_ore_rect_real[i].midright)
-        
-        self.levelup_updown_ore_prop_disp = [None] * len(settings.ore_list)
-        self.levelup_after_ore_prop_disp = [None] * len(settings.ore_list)
-        self.levelup_after_ore_rect_real = [None] * len(settings.ore_list)
-        self.levelup_updown_ore_prop_rect = [None] * len(settings.ore_list)
-        self.levelup_after_ore_prop_rect = [None] * len(settings.ore_list)
-        for i in range(len(settings.ore_list)):
-            for j in range(len(settings.prop_change_change_list)):
-                if settings.lucky_flower_level <= settings.prop_change_change_list[j]:
-                    if settings.ore_prop_change_list[j][i] < 0:
-                        self.levelup_updown_ore_prop_disp[i] = self.levelup_font.render(f"{settings.ore_prop_change_list[j][i]:.1%}", True, RED)
-                        self.levelup_after_ore_prop_disp[i] = self.levelup_font.render(f"{(settings.ore_prop_list[i] + settings.ore_prop_change_list[j][i]):.1%}", True, RED)
-                    elif settings.ore_prop_change_list[j][i] == 0:
-                        self.levelup_updown_ore_prop_disp[i] = self.levelup_font.render("+0.0%", True, BLACK)
-                        self.levelup_after_ore_prop_disp[i] = self.levelup_font.render(f"{(settings.ore_prop_list[i] + settings.ore_prop_change_list[j][i]):.1%}", True, BLACK)
-                    else:
-                        self.levelup_updown_ore_prop_disp[i] = self.levelup_font.render(f"+{settings.ore_prop_change_list[j][i]:.1%}", True, GREEN)
-                        self.levelup_after_ore_prop_disp[i] = self.levelup_font.render(f"{(settings.ore_prop_list[i] + settings.ore_prop_change_list[j][i]):.1%}", True, GREEN)
-                    break
-            self.levelup_after_ore_rect_real[i] = pygame.Rect(MINE_W // 2, HEADLINE_SIZE + (i+2)*TEXT_SIZE, MINE_W // 2 - 1, TEXT_SIZE)
-            self.levelup_updown_ore_prop_rect[i] = self.levelup_updown_ore_prop_disp[i].get_rect(midleft=self.levelup_after_ore_rect_real[i].center)
-            self.levelup_after_ore_prop_rect[i] = self.levelup_after_ore_prop_disp[i].get_rect(midright=self.levelup_after_ore_rect_real[i].midright)
-        
+            updown_value = self.after_values[i] - self.before_values[i]
+            if updown_value < 0:
+                self.levelup_updown_ore_prob_disp[i] = self.levelup_font.render(f"{updown_value:.2%}", True, RED)
+                self.levelup_after_ore_prob_disp[i] = self.levelup_font.render(f"{self.after_values[i]:.2%}", True, RED)
+            elif updown_value == 0:
+                self.levelup_updown_ore_prob_disp[i] = self.levelup_font.render("+0.00%", True, BLACK)
+                self.levelup_after_ore_prob_disp[i] = self.levelup_font.render(f"{self.after_values[i]:.2%}", True, BLACK)
+            else:
+                self.levelup_updown_ore_prob_disp[i] = self.levelup_font.render(f"+{updown_value:.2%}", True, GREEN)
+                self.levelup_after_ore_prob_disp[i] = self.levelup_font.render(f"{self.after_values[i]:.2%}", True, GREEN)
+            self.levelup_updown_ore_prob_rect[i] = self.levelup_updown_ore_prob_disp[i].get_rect(midleft=(MINE_W * 3//4 - ADJUST, HEADLINE_SIZE + (2*i+5)*TEXT_SIZE//2))
+            self.levelup_after_ore_prob_rect[i] = self.levelup_after_ore_prob_disp[i].get_rect(midright=(MINE_W - ADJUST, HEADLINE_SIZE + (2*i+5)*TEXT_SIZE//2))
+    
         # レベルアップボタン
         self.button_levelup_color = GRAY
         self.button_levelup = pygame.Rect(MINE_W // 6, MINE_H * 4//5, MINE_W * 2//3, 3*TEXT_SIZE)
@@ -135,25 +131,8 @@ class Main():
         # キーボード操作時にはいいいえのどちらを選択しているか(y=0, n=1)
         self.y_n_which = None
     
-    # 左側画面の鉱石を制限
-    def left_ore_limit(self):
-        ore = len(settings.ore_prop_list)
-        for i in range(len(settings.prop_change_change_list)):
-            if settings.lucky_flower_level <= settings.prop_change_change_list[i]:
-                lst = list(map(lambda x, y: x+y, settings.ore_prop_list, settings.ore_prop_change_list[i]))
-                break
-        while True:
-            if lst[ore-1] !=  0:
-                break
-            ore -= 1
-        return ore
-    
     # 幸運の花レベルアップ
     def flower_levelup(self):
-        for i in range(len(settings.prop_change_change_list)):
-            if settings.lucky_flower_level <= settings.prop_change_change_list[i]:
-                settings.ore_prop_list = list(map(lambda x, y: x+y, settings.ore_prop_list, settings.ore_prop_change_list[i]))
-                break
         settings.money -= int(settings.flower_levelup_money_zero * settings.flower_levelup_money_ratio**settings.lucky_flower_level)
         settings.lucky_flower_level += 1
         settings.record_list[13] = max(settings.lucky_flower_level, settings.record_list[13])
@@ -164,27 +143,32 @@ class Main():
         self.lucky_flower_disp = self.lucky_flower_font.render(f"幸運の花 現在：LEVEL {settings.lucky_flower_level}", True, BLACK)
         self.lucky_flower_rect = self.lucky_flower_disp.get_rect(center=self.lucky_flower_rect_real.center)
         self.levelup_before_disp = self.level_font.render(f"LEVEL {settings.lucky_flower_level}", True, BLACK)
-        self.levelup_before_rect = self.levelup_before_disp.get_rect(center=self.levelup_before_rect_real.center)
+        self.levelup_before_rect = self.levelup_before_disp.get_rect(center=(MINE_W // 4, HEADLINE_SIZE + TEXT_SIZE))
+        
+        self.before_values = settings.get_probs(settings.lucky_flower_level)
         for i in range(len(settings.ore_list)):
-            self.levelup_before_ore_prop_disp[i] = self.levelup_font.render(f"{settings.ore_prop_list[i]:.1%}", True, BLACK)
-            self.levelup_before_ore_prop_rect[i] = self.levelup_before_ore_prop_disp[i].get_rect(midright=self.levelup_before_ore_rect_real[i].midright)
+            self.levelup_before_ore_name_disp[i] = self.levelup_font.render(settings.ore_name_list[i], True, BLACK)
+            self.levelup_before_ore_prob_disp[i] = self.levelup_font.render(f"{self.before_values[i]:.2%}", True, BLACK)
+            self.levelup_before_ore_name_rect[i] = self.levelup_before_ore_name_disp[i].get_rect(midleft=(TEXT_SIZE, HEADLINE_SIZE + (2*i+5)*TEXT_SIZE//2))
+            self.levelup_before_ore_prob_rect[i] = self.levelup_before_ore_prob_disp[i].get_rect(midright=(MINE_W // 2 - ADJUST, HEADLINE_SIZE + (2*i+5)*TEXT_SIZE//2))
+        
+        self.after_values = settings.get_probs(settings.lucky_flower_level+1)
         self.levelup_after_disp = self.level_font.render(f"LEVEL {settings.lucky_flower_level+1}", True, BLACK)
-        self.levelup_after_rect = self.levelup_after_disp.get_rect(center=self.levelup_after_rect_real.center)
+        self.levelup_after_rect = self.levelup_after_disp.get_rect(center=(MINE_W * 3//4, HEADLINE_SIZE + TEXT_SIZE))
         for i in range(len(settings.ore_list)):
-            for j in range(len(settings.prop_change_change_list)):
-                if settings.lucky_flower_level <= settings.prop_change_change_list[j]:
-                    if settings.ore_prop_change_list[j][i] < 0:
-                        self.levelup_updown_ore_prop_disp[i] = self.levelup_font.render(f"{settings.ore_prop_change_list[j][i]:.1%}", True, RED)
-                        self.levelup_after_ore_prop_disp[i] = self.levelup_font.render(f"{(settings.ore_prop_list[i] + settings.ore_prop_change_list[j][i]):.1%}", True, RED)
-                    elif settings.ore_prop_change_list[j][i] == 0:
-                        self.levelup_updown_ore_prop_disp[i] = self.levelup_font.render("+0.0%", True, BLACK)
-                        self.levelup_after_ore_prop_disp[i] = self.levelup_font.render(f"{(settings.ore_prop_list[i] + settings.ore_prop_change_list[j][i]):.1%}", True, BLACK)
-                    else:
-                        self.levelup_updown_ore_prop_disp[i] = self.levelup_font.render(f"+{settings.ore_prop_change_list[j][i]:.1%}", True, GREEN)
-                        self.levelup_after_ore_prop_disp[i] = self.levelup_font.render(f"{(settings.ore_prop_list[i] + settings.ore_prop_change_list[j][i]):.1%}", True, GREEN)
-                    break
-            self.levelup_updown_ore_prop_rect[i] = self.levelup_updown_ore_prop_disp[i].get_rect(midleft=self.levelup_after_ore_rect_real[i].center)
-            self.levelup_after_ore_prop_rect[i] = self.levelup_after_ore_prop_disp[i].get_rect(midright=self.levelup_after_ore_rect_real[i].midright)
+            updown_value = self.after_values[i] - self.before_values[i]
+            if updown_value < 0:
+                self.levelup_updown_ore_prob_disp[i] = self.levelup_font.render(f"{updown_value:.2%}", True, RED)
+                self.levelup_after_ore_prob_disp[i] = self.levelup_font.render(f"{self.after_values[i]:.2%}", True, RED)
+            elif updown_value == 0:
+                self.levelup_updown_ore_prob_disp[i] = self.levelup_font.render("+0.00%", True, BLACK)
+                self.levelup_after_ore_prob_disp[i] = self.levelup_font.render(f"{self.after_values[i]:.2%}", True, BLACK)
+            else:
+                self.levelup_updown_ore_prob_disp[i] = self.levelup_font.render(f"+{updown_value:.2%}", True, GREEN)
+                self.levelup_after_ore_prob_disp[i] = self.levelup_font.render(f"{self.after_values[i]:.2%}", True, GREEN)
+            self.levelup_updown_ore_prob_rect[i] = self.levelup_updown_ore_prob_disp[i].get_rect(midleft=(MINE_W * 3//4 - ADJUST, HEADLINE_SIZE + (2*i+5)*TEXT_SIZE//2))
+            self.levelup_after_ore_prob_rect[i] = self.levelup_after_ore_prob_disp[i].get_rect(midright=(MINE_W - ADJUST, HEADLINE_SIZE + (2*i+5)*TEXT_SIZE//2))
+
         if int(settings.flower_levelup_money_zero * settings.flower_levelup_money_ratio**settings.lucky_flower_level) < 1e6:
             self.button_levelup_disp = self.button_levelup_font.render(f"LEVEL UP ￥{int(settings.flower_levelup_money_zero * settings.flower_levelup_money_ratio**settings.lucky_flower_level):,}", True, BLACK)
         else:
@@ -200,20 +184,21 @@ class Main():
         pygame.draw.line(canvas, BLACK, (0, HEADLINE_SIZE), (MINE_W, HEADLINE_SIZE), 2)
         # レベルアップ前後の確率の描画
         canvas.blit(self.levelup_before_disp, self.levelup_before_rect)
-        canvas.blit(self.levelup_arrow_disp, self.levelup_arrow_rect)
-        canvas.blit(self.levelup_after_disp, self.levelup_after_rect)
-        for i in range(self.left_ore_limit()):
+        for i in range(settings.ore_limit(settings.get_probs(settings.lucky_flower_level+1))):
             canvas.blit(self.ore_image[i], (0, HEADLINE_SIZE + (i+2)*TEXT_SIZE))
             canvas.blit(self.levelup_before_ore_name_disp[i], self.levelup_before_ore_name_rect[i])
-            canvas.blit(self.levelup_before_ore_prop_disp[i], self.levelup_before_ore_prop_rect[i])
-            canvas.blit(self.levelup_updown_ore_prop_disp[i], self.levelup_updown_ore_prop_rect[i])
-            canvas.blit(self.levelup_after_ore_prop_disp[i], self.levelup_after_ore_prop_rect[i])
-        # レベルアップボタンの描画
-        if settings.lucky_flower_level < 200:
+            canvas.blit(self.levelup_before_ore_prob_disp[i], self.levelup_before_ore_prob_rect[i])
+        if settings.lucky_flower_level < 300:
+            canvas.blit(self.levelup_arrow_disp, self.levelup_arrow_rect)
+            canvas.blit(self.levelup_after_disp, self.levelup_after_rect)
+            for i in range(settings.ore_limit(settings.get_probs(settings.lucky_flower_level+1))):
+                canvas.blit(self.levelup_updown_ore_prob_disp[i], self.levelup_updown_ore_prob_rect[i])
+                canvas.blit(self.levelup_after_ore_prob_disp[i], self.levelup_after_ore_prob_rect[i])
+            # レベルアップボタンの描画
             pygame.draw.rect(canvas, self.button_levelup_color, self.button_levelup)
             pygame.draw.rect(canvas, BLACK, self.button_levelup, width=2)
             canvas.blit(self.button_levelup_disp, self.button_levelup_rect)
-    
+
     # レベルアップ確認画面
     def levelup_select_draw(self, canvas):
         self.dark_surface = pygame.Surface((FULL_W, FULL_H))

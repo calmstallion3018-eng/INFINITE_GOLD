@@ -311,7 +311,7 @@ class Main():
         old_clip = canvas.get_clip()
         canvas.set_clip(self.scroll_screen)
         # ツルハシの鋳造・鍛錬・セット画面の描画
-        for i in range(min(settings.ore_limit(settings.ore_prop_list)-1, len(settings.pickaxe_type))):
+        for i in range(min(settings.ore_limit(settings.get_probs(settings.lucky_flower_level))-1, len(settings.pickaxe_type))):
             pygame.draw.rect(canvas, self.cast_button_color[i], self.cast_button[i])
             canvas.blit(self.image_pickaxe_sample[i], self.cast_button[i].topleft)
             canvas.blit(self.sample_name_disp[i], self.sample_name_rect[i])

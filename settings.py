@@ -33,63 +33,12 @@ class Color:
     GREEN = (0,255,0)
     PURPLE = (170,120,210)
     DARK_PURPLE = (120,70,160)
-
-# 下部ボタンの文字サイズ
-bottom_button_font_size = Display.HEIGHT // 20
-
-# 下部ボタンの名前
-bottom_button_name = ["鉱山", "交易所", "幸運", "鍛冶屋", "雇用", "転生", "実績", "セーブ"]
     
-# 下部ボタンの数
-bottom_button_quantity = len(bottom_button_name)
-    
-# 表示する鉱石を制限
-def ore_limit(ore_prop_list):
-    ore = len(ore_prop_list)
-    while True:
-        if ore_prop_list[ore-1] != 0:
-            break
-        ore -= 1
-    return ore
-
-# 階層番号（変数）
-stage_num = 1
-
-# プレイヤーの位置（変数）
-player_x = Display.BLOCK_SIZE * 3/2
-player_y = Display.BLOCK_SIZE * 3/2
-
-# 鉱夫の位置（変数）
-character_x = []
-character_y = []
-
-# プレイヤーの速度
-player_speed = Display.BLOCK_SIZE
-
-# 鉱夫の移動間隔計算用（変数）
-character_move_time = []
-
-# 採掘場所のサイズ（転生変数）
-mining_size_x = 10
-mining_size_y = 10
-
-# 鉱物の有無のリスト（二次元）（変数） -1 -> nonexist, 0~1 -> 鉱物の固有値
-ore_exist = [[-1]*mining_size_x for _ in range(mining_size_y)]
-
-# お金（変数）
-money = 0
-
 # 鉱石の種類リスト
 ore_list = ["soil", "stone", "iron", "copper", "silver", "gold", "diamond", "ruby", "sapphire", "emerald", "alexandrite", "paraiba_tourmaline", "padparadscha_sapphire"]
 
 # 鉱石の名前リスト
 ore_name_list = ["土", "石", "鉄", "銅", "銀", "金", "ダイヤモンド", "ルビー", "サファイア", "エメラルド", "アレキサンドライト", "パライバトルマリン", "パパラチアサファイア"]
-
-# 鉱石の所持数リスト（変数）
-ore_possession_list = [0] * len(ore_list)
-
-# 鉱石の耐久値リスト
-ore_durability_list = [2, 5, 20, 100, 300, 700, 1500, 1500, 1500, 1500, 2500, 2500, 2500]
 
 # 画像ダウンロード
 BASE_DIR = os.path.dirname(__file__)
@@ -122,6 +71,57 @@ PICKAXE_IMAGE = []
 for name in ore_list[1:7]:
     PICKAXE_IMAGE.append(os.path.join(PICKAXES_DIR, name+"_pickaxe.png"))
 
+# 下部ボタンの文字サイズ
+bottom_button_font_size = Display.HEIGHT // 20
+
+# 下部ボタンの名前
+bottom_button_name = ["鉱山", "交易所", "幸運", "鍛冶屋", "雇用", "転生", "実績", "セーブ"]
+    
+# 下部ボタンの数
+bottom_button_quantity = len(bottom_button_name)
+    
+# 表示する鉱石を制限
+def ore_limit(props):
+    ore = len(props)
+    while True:
+        if props[ore-1] != 0:
+            break
+        ore -= 1
+    return ore
+
+# 階層番号（変数）
+stage_num = 1
+
+# プレイヤーの位置（変数）
+player_x = Display.BLOCK_SIZE * 3/2
+player_y = Display.BLOCK_SIZE * 3/2
+
+# 鉱夫の位置（変数）
+character_x = []
+character_y = []
+
+# プレイヤーの速度
+player_speed = Display.BLOCK_SIZE
+
+# 鉱夫の移動間隔計算用（変数）
+character_move_time = []
+
+# 採掘場所のサイズ（転生変数）
+mining_size_x = 10
+mining_size_y = 10
+
+# 鉱物の有無のリスト（二次元）（変数） -1 -> nonexist, 0~1 -> 鉱物の固有値
+ore_exist = [[-1]*mining_size_x for _ in range(mining_size_y)]
+
+# お金（変数）
+money = 0
+
+# 鉱石の所持数リスト（変数）
+ore_possession_list = [0] * len(ore_list)
+
+# 鉱石の耐久値リスト
+ore_durability_list = [2, 5, 20, 100, 300, 700, 1500, 1500, 1500, 1500, 2500, 2500, 2500]
+
 # 採掘耐久値（変数）
 mining_durability = [[None]*mining_size_x for _ in range(mining_size_y)]
 
@@ -131,29 +131,39 @@ mining_degree = [[0]*mining_size_x for _ in range(mining_size_y)]
 # 採掘力（変数）
 mining_power = [1]
 
-# 鉱物の出現確率リスト（変数）
-ore_prop_list = [0.9, 0.1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-
-# 鉱物の出現確率の変更リストのリスト
-ore_prop_change_list = []
-ore_prop_change_list.append([-0.005, 0.005, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]) # 0~9 -> [0.85, 0.15, 0...]
-ore_prop_change_list.append([-0.01, 0.005, 0.005, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]) # 10~29 -> [0.65, 0.25, 0.1, 0...]
-ore_prop_change_list.append([-0.01, 0.005, 0.003, 0.002, 0, 0, 0, 0, 0, 0, 0, 0, 0]) # 30~49 -> [0.45, 0.35, 0.16, 0.04, 0...]
-ore_prop_change_list.append([-0.015, 0.01, 0.003, 0.001, 0.001, 0, 0, 0, 0, 0, 0, 0, 0]) # 50~59 -> [0.35, 0.45, 0.19, 0.05, 0.01, 0...]
-ore_prop_change_list.append([-0.015, 0.005, 0.005, 0.003, 0.002, 0, 0, 0, 0, 0, 0, 0, 0]) # 60~79 -> [0, 0.55, 0.29, 0.11, 0.05, 0...]
-ore_prop_change_list.append([0, -0.01, 0.003, 0.003, 0.002, 0.002, 0, 0, 0, 0, 0, 0, 0]) # 80~99 -> [0, 0.35, 0.35, 0.17, 0.09, 0.04, 0...]
-ore_prop_change_list.append([0, -0.015, 0.005, 0.003, 0.003, 0.003, 0.001, 0, 0, 0, 0, 0, 0]) # 100~109 -> [0, 0.2, 0.4, 0.2, 0.12, 0.07, 0.01, 0...]
-ore_prop_change_list.append([0, -0.005, 0, 0, 0.002, 0.002, 0.001, 0, 0, 0, 0, 0, 0]) # 110~129 -> [0, 0.1, 0.4, 0.2, 0.16, 0.11, 0.03, 0...]
-ore_prop_change_list.append([0, -0.005, 0, 0, 0, 0, 0.002, 0.001, 0.001, 0.001, 0, 0, 0]) # 130~149 -> [0, 0, 0.4, 0.2, 0.16, 0.11, 0.07, 0.02, 0.02, 0.02, 0...]
-ore_prop_change_list.append([0, 0, -0.002, -0.001, -0.001, 0, 0.001, 0.001, 0.001, 0.001, 0, 0, 0]) # 150~169 -> [0, 0, 0.36, 0.18, 0.14, 0.11, 0.09, 0.04, 0.04, 0.04, ...]
-ore_prop_change_list.append([0, 0, -0.003, 0, 0, 0, 0, 0, 0, 0, 0.001, 0.001, 0.001]) # 170~199 -> [0, 0, 0.27, 0.18, 0.14, 0.11, 0.09, 0.04, 0.04, 0.04, 0.03, 0.03, 0.03]
-ore_prop_change_list.append([0, 0, -0.02, -0.015, -0.01, 0, 0, 0.01, 0.01, 0.01, 0.005, 0.005, 0.005]) # 200 -> [0, 0, 0.25, 0.165, 0.13, 0.11, 0.09, 0.05, 0.05, 0.05, 0.035, 0.035, 0.035]
-
-# 出現確率変化値の変化場所リスト
-prop_change_change_list = [9,29,49,59,79,99,109,129,149,169,199,200]
-
 # 鉱物の売値リスト
 ore_price_list = [1, 5, 200, 3000, 25000, 150000, 600000, 1000000, 1000000, 1000000, 10000000, 10000000, 10000000]
+
+# 鉱物の出現確率変更
+def smoothstep(x): # S字有理関数 2ax^5-5ax^4+(-2+4a)x^3+(3-a)x^2, a=-2
+    return x**2*(5 - 10*x + 10*x**2 - 4*x**3)
+
+def s_curve(level, a, b): # a~bの範囲を0~1に正規化してS字scoreを返す
+    if level <= a:
+        return 0
+    if level >= b:
+        return 1
+    return smoothstep((level - a)/(b - a))
+
+def get_probs(level): # それぞれの鉱石の出現確率を返す関数
+    R_soil = 0.9 * (1 - s_curve(level, 0, 100)) # 土の出現確率score, level=0 -> 0.9, level=100 -> 0
+    
+    stone_up = 0.1 + 0.9 * s_curve(level, 0, 100)
+    stone_down = 1 - s_curve(level, 100, 200)
+    R_stone = stone_up * stone_down # 石の出現確率score, level=0 -> 0.1, level=100 -> 1, level=200 -> 0
+    
+    R_iron = s_curve(level, 10, 210) # 鉄の出現確率score, level=10 -> 0, level=210 -> 1
+    R_copper = 0.8 * s_curve(level, 30, 230) # 銅の出現確率score, level=30 -> 0, level=230 -> 0.8
+    R_silver = 0.5 * s_curve(level, 50, 250) # 銀の出現確率score, level=50 -> 0, level=250 -> 0.5
+    R_gold = 0.4 * s_curve(level, 70, 270) # 金の出現確率score, level=70 -> 0, level=270 -> 0.4
+    R_diamond = 0.3 * s_curve(level, 100, 300) # ダイヤモンドの出現確率score, level=100 -> 0, level=300 -> 0.3
+    R_RSEs = 0.1 * s_curve(level, 120, 300) # 世界四大宝石（ダイヤモンド除く）の出現確率score, level=120 -> 0, level=300 -> 0.1
+    R_APPs = 0.05 * s_curve(level, 150, 300) # 世界三大希少石の出現確率score, level=150 -> 0, level=300 -> 0.05
+    
+    probs = [R_soil, R_stone, R_iron, R_copper, R_silver, R_gold, R_diamond] + [R_RSEs]*3 + [R_APPs]*3
+    
+    s = sum(probs)
+    return [p/s for p in probs] # S字scoreの合計を1にする
 
 # 幸運の花レベル（変数）
 lucky_flower_level = 0
@@ -187,10 +197,10 @@ materials_require = [[(1, 10)], [(1, 5), (2, 10)], [(2, 5), (3, 10)], [(2, 5), (
 character_speed = []
 
 # 雇用必要金額初期値（=昇給必要金額初期値）
-employ_money_zero = 10000
+employ_money_zero = 500
 
 # 雇用必要金額倍率補正
-employ_money_ratio = 20
+employ_money_ratio = 10
 
 # 昇給必要金額倍率補正関数（xは何-1人目か）
 def raise_money_ratio(x):
@@ -240,7 +250,7 @@ record_list[19] = mining_size_x * mining_size_y
 record_terms_num = []
 for _ in ore_list:
     record_terms_num.append([50, 100, 200, 300, 500, 750] + list(range(1000, 5000, 500)) + list(range(5000, 10001, 1000))) # 0~12
-record_terms_num.append(list(range(10, 201, 10))) # 13
+record_terms_num.append(list(range(10, 301, 10))) # 13
 record_terms_num.append([5, 10, 20, 30] + list(range(50, 500, 50)) + list(range(500, 1001, 100))) # 14
 record_terms_num.append(list(range(5, 101, 5))) # 15
 record_terms_num.append(list(range(1, 21))) # 16

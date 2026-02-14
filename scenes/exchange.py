@@ -135,7 +135,7 @@ class Main():
         # 見出しの描画
         canvas.blit(self.headline_disp, self.headline_rect)
         # 鉱石売却画面の描画
-        for i in range(settings.ore_limit(settings.ore_prop_list)):
+        for i in range(settings.ore_limit(settings.get_probs(settings.lucky_flower_level))):
             if i % 2 == 0:
                 canvas.blit(self.ore_image[i], (0, HEADLINE_SIZE + (i//2)*LEFT_H))
                 pygame.draw.line(canvas, BLACK, (0, HEADLINE_SIZE + (i//2+1)*LEFT_H), (MINE_W // 2, HEADLINE_SIZE + (i//2+1)*LEFT_H), 1)
@@ -149,7 +149,7 @@ class Main():
                 pygame.draw.rect(canvas, BLACK, self.sell_button[i][j], 2)
                 canvas.blit(self.sell_button_disp[j], self.sell_button_rect[i][j])
         pygame.draw.line(canvas, BLACK, (0, HEADLINE_SIZE), (MINE_W, HEADLINE_SIZE), 1)
-        pygame.draw.line(canvas, BLACK, (MINE_W // 2, HEADLINE_SIZE), (MINE_W // 2, HEADLINE_SIZE + LEFT_H * ((settings.ore_limit(settings.ore_prop_list)+1)//2)), 1)
+        pygame.draw.line(canvas, BLACK, (MINE_W // 2, HEADLINE_SIZE), (MINE_W // 2, HEADLINE_SIZE + LEFT_H * ((settings.ore_limit(settings.get_probs(settings.lucky_flower_level))+1)//2)), 1)
     
     # 売却確認画面
     def sell_select_draw(self, canvas):

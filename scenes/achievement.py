@@ -56,7 +56,7 @@ class Main():
         # 実績rect
         self.record_terms_text = []
         for i, name in enumerate(settings.ore_name_list):
-            if i < settings.ore_limit(settings.ore_prop_list):
+            if i < settings.ore_limit(settings.get_probs(settings.lucky_flower_level)):
                 self.record_terms_text.append(f"{name}を累計{settings.record_terms_num[i][settings.record_completes[i]]}個採掘する")
             else:
                 self.record_terms_text.append("????????????????????")
@@ -72,7 +72,7 @@ class Main():
         self.record_bar_h = 10
         self.reward_text = []
         for i, name in enumerate(settings.ore_name_list):
-            if i < settings.ore_limit(settings.ore_prop_list):
+            if i < settings.ore_limit(settings.get_probs(settings.lucky_flower_level)):
                 self.reward_text.append(f"{name}の価格 +{int(settings.reward_ratio[i][settings.record_completes[i]] * 100)}%")
             else:
                 self.reward_text.append("????????????????????")
@@ -178,7 +178,7 @@ class Main():
     def update_page(self):
         self.record_terms_text = []
         for i, name in enumerate(settings.ore_name_list):
-            if i < settings.ore_limit(settings.ore_prop_list):
+            if i < settings.ore_limit(settings.get_probs(settings.lucky_flower_level)):
                 self.record_terms_text.append(f"{name}を累計{settings.record_terms_num[i][settings.record_completes[i]]}個採掘する")
             else:
                 self.record_terms_text.append("????????????????????")
@@ -192,7 +192,7 @@ class Main():
         self.record_terms_text.append(f"実績を{settings.record_terms_num[20][settings.record_completes[20]]}個達成する(この実績は除く)")
         self.reward_text = []
         for i, name in enumerate(settings.ore_name_list):
-            if i < settings.ore_limit(settings.ore_prop_list):
+            if i < settings.ore_limit(settings.get_probs(settings.lucky_flower_level)):
                 self.reward_text.append(f"{name}の価格 +{int(settings.reward_ratio[i][settings.record_completes[i]] * 100)}%")
             else:
                 self.reward_text.append("????????????????????")

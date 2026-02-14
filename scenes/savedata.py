@@ -137,7 +137,6 @@ class Main():
                 "mining_durability": settings.mining_durability,
                 "mining_degree": settings.mining_degree,
                 "mining_power": settings.mining_power,
-                "ore_prop_list": settings.ore_prop_list,
                 "lucky_flower_level": settings.lucky_flower_level,
                 "pickaxe_level": settings.pickaxe_level,
                 "use_pickaxe_type": settings.use_pickaxe_type,
@@ -194,7 +193,6 @@ class Main():
             settings.mining_durability = data["mining_durability"]
             settings.mining_degree = data["mining_degree"]
             settings.mining_power = data["mining_power"]
-            settings.ore_prop_list = data["ore_prop_list"]
             settings.lucky_flower_level = data["lucky_flower_level"]
             settings.pickaxe_level = data["pickaxe_level"]
             settings.use_pickaxe_type = data["use_pickaxe_type"]
