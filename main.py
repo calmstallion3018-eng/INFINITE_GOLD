@@ -790,6 +790,29 @@ while running:
         gamen_base.update_page()
         gamen_base.draw_base(canvas)
     
+    # 売却不可能時の×マークの描画
+    if gamen is gamen_mine_list[1]:
+        gamen.is_cannot, cannot_start_time["sell"] = draw_cannot(gamen.is_cannot, cannot_start_time.get("sell", 0), gamen.cannot_sell_draw, canvas)
+    # 幸運の花レベルアップ不可能時の×マークの描画
+    elif gamen is gamen_mine_list[2]:
+        gamen.is_cannot, cannot_start_time["flower"] = draw_cannot(gamen.is_cannot, cannot_start_time.get("flower", 0), gamen.cannot_levelup_draw, canvas)
+    elif gamen is gamen_mine_list[3]:
+        # 鋳造不可能時の×マークの描画
+        gamen.is_cannot_cast, cannot_start_time["cast"] = draw_cannot(gamen.is_cannot_cast, cannot_start_time.get("cast", 0), gamen.cannot_cast_draw, canvas)
+        # 鍛錬不可能時の×マークの描画
+        gamen.is_cannot_training, cannot_start_time["training"] = draw_cannot(gamen.is_cannot_training, cannot_start_time.get("training", 0), gamen.cannot_training_draw, canvas)
+    elif gamen is gamen_mine_list[4]:
+        # 採用不可能時の×マークの描画
+        gamen.is_cannot_employ, cannot_start_time["employ"] = draw_cannot(gamen.is_cannot_employ, cannot_start_time.get("employ", 0), gamen.cannot_employ_draw, canvas)
+        # 昇給不可能時の×マークの描画
+        gamen.is_cannot_levelup, cannot_start_time["levelup"] = draw_cannot(gamen.is_cannot_levelup, cannot_start_time.get("levelup", 0), gamen.cannot_levelup_draw, canvas)
+    # 転生不可能時の×マークの描画
+    elif gamen is gamen_mine_list[5]:
+        gamen.is_cannot, cannot_start_time["reinc"] = draw_cannot(gamen.is_cannot, cannot_start_time.get("reinc", 0), gamen.cannot_reinc_draw, canvas)
+    # 実績未達時のxマークの描画
+    elif gamen is gamen_mine_list[6]:
+        gamen.is_cannot, cannot_start_time["reward"] = draw_cannot(gamen.is_cannot, cannot_start_time.get("reward", 0), gamen.cannot_reward_draw, canvas)
+
     # はいいいえの選択をする画面かどうか
     is_y_n = True
     # セーブorロード選択画面
@@ -840,29 +863,6 @@ while running:
     if gamen is gamen_mine_list[4] and gamen.change_pickaxe_select:
         gamen.change_pickaxe_select_draw(canvas)
     
-    # 売却不可能時の×マークの描画
-    if gamen is gamen_mine_list[1]:
-        gamen.is_cannot, cannot_start_time["sell"] = draw_cannot(gamen.is_cannot, cannot_start_time.get("sell", 0), gamen.cannot_sell_draw, canvas)
-    # 幸運の花レベルアップ不可能時の×マークの描画
-    elif gamen is gamen_mine_list[2]:
-        gamen.is_cannot, cannot_start_time["flower"] = draw_cannot(gamen.is_cannot, cannot_start_time.get("flower", 0), gamen.cannot_levelup_draw, canvas)
-    elif gamen is gamen_mine_list[3]:
-        # 鋳造不可能時の×マークの描画
-        gamen.is_cannot_cast, cannot_start_time["cast"] = draw_cannot(gamen.is_cannot_cast, cannot_start_time.get("cast", 0), gamen.cannot_cast_draw, canvas)
-        # 鍛錬不可能時の×マークの描画
-        gamen.is_cannot_training, cannot_start_time["training"] = draw_cannot(gamen.is_cannot_training, cannot_start_time.get("training", 0), gamen.cannot_training_draw, canvas)
-    elif gamen is gamen_mine_list[4]:
-        # 採用不可能時の×マークの描画
-        gamen.is_cannot_employ, cannot_start_time["employ"] = draw_cannot(gamen.is_cannot_employ, cannot_start_time.get("employ", 0), gamen.cannot_employ_draw, canvas)
-        # 昇給不可能時の×マークの描画
-        gamen.is_cannot_levelup, cannot_start_time["levelup"] = draw_cannot(gamen.is_cannot_levelup, cannot_start_time.get("levelup", 0), gamen.cannot_levelup_draw, canvas)
-    # 転生不可能時の×マークの描画
-    elif gamen is gamen_mine_list[5]:
-        gamen.is_cannot, cannot_start_time["reinc"] = draw_cannot(gamen.is_cannot, cannot_start_time.get("reinc", 0), gamen.cannot_reinc_draw, canvas)
-    # 実績未達時のxマークの描画
-    elif gamen is gamen_mine_list[6]:
-        gamen.is_cannot, cannot_start_time["reward"] = draw_cannot(gamen.is_cannot, cannot_start_time.get("reward", 0), gamen.cannot_reward_draw, canvas)
-
     scaled = pygame.transform.smoothscale(canvas, (real_w, real_h))
     screen.blit(scaled, (0,0))
     pygame.display.update()
